@@ -7,7 +7,9 @@ import (
 
 	"github.com/maldan/gam-app-english/internal/app/english/api"
 	"github.com/maldan/gam-app-english/internal/app/english/core"
-	"github.com/maldan/go-restserver"
+	"github.com/maldan/go-rapi"
+	"github.com/maldan/go-rapi/rapi_core"
+	"github.com/maldan/go-rapi/rapi_rest"
 )
 
 func Start(frontFs embed.FS) {
@@ -23,11 +25,17 @@ func Start(frontFs embed.FS) {
 	// Set
 	core.DataDir = *dataDir
 
-	// Init server
-	restserver.Start(fmt.Sprintf("%s:%d", *host, *port), map[string]interface{}{
-		"/": restserver.VirtualFs{Root: "frontend/build/", Fs: frontFs},
-		"/api": map[string]interface{}{
-			"main": api.MainApi{},
+	// Start server
+	rapi.Start(rapi.Config{
+		Host: fmt.Sprintf("%s:%d", *host, *port),
+		Router: map[string]rapi_core.Handler{
+			"/api": rapi_rest.ApiHandler{
+				Controller: map[string]interface{}{
+					"main": api.MainApi{},
+					"word": api.WordApi{},
+				},
+			},
 		},
+		DbPath: core.DataDir,
 	})
 }
