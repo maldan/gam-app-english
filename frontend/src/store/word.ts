@@ -26,12 +26,20 @@ export default {
       (
         await Axios.post(`${action.rootState.main.API_URL}/word`, {
           name: action.rootState.modal.data.name.toLowerCase(),
+          category: action.rootState.modal.data.category.toLowerCase(),
           translate: {
-            noun: action.rootState.modal.data.translate.noun
-              .split(', ')
-              .map((x: string) => x.trim()),
-            verb: [],
-            adjective: [],
+            noun:
+              action.rootState.modal.data.translate?.noun
+                ?.split(', ')
+                ?.map((x: string) => x.trim()) || [],
+            verb:
+              action.rootState.modal.data.translate?.verb
+                ?.split(', ')
+                ?.map((x: string) => x.trim()) || [],
+            adjective:
+              action.rootState.modal.data.translate?.adjective
+                ?.split(', ')
+                ?.map((x: string) => x.trim()) || [],
           },
         })
       ).data.response;
@@ -41,12 +49,20 @@ export default {
       (
         await Axios.patch(`${action.rootState.main.API_URL}/word`, {
           name: action.rootState.modal.data.name.toLowerCase(),
+          category: action.rootState.modal.data.category.toLowerCase(),
           translate: {
-            noun: action.rootState.modal.data.translate.noun
-              .split(', ')
-              .map((x: string) => x.trim()),
-            verb: [],
-            adjective: [],
+            noun:
+              action.rootState.modal.data.translate?.noun
+                ?.split(', ')
+                ?.map((x: string) => x.trim()) || [],
+            verb:
+              action.rootState.modal.data.translate?.verb
+                ?.split(', ')
+                ?.map((x: string) => x.trim()) || [],
+            adjective:
+              action.rootState.modal.data.translate?.adjective
+                ?.split(', ')
+                ?.map((x: string) => x.trim()) || [],
           },
         })
       ).data.response;
@@ -55,6 +71,9 @@ export default {
     async delete(action: WordActionContext, payload: string) {
       (await Axios.delete(`${action.rootState.main.API_URL}/word?name=${payload}`)).data.response;
       action.dispatch('getList');
+    },
+    async play(action: WordActionContext, payload: string) {
+      new Audio(`${action.rootState.main.API_URL}/word/play?name=${payload}`).play();
     },
   },
 };

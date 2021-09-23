@@ -8,6 +8,7 @@ type Translate struct {
 
 type Word struct {
 	Name      string    `json:"name"`
+	Category  string    `json:"category"`
 	Translate Translate `json:"translate"`
 }
 

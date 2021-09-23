@@ -7,6 +7,12 @@
     />
     <ui-input
       @keydown.enter="$store.dispatch('modal/ok')"
+      placeholder="Category..."
+      v-model="$store.state.modal.data.category"
+    />
+
+    <ui-input
+      @keydown.enter="$store.dispatch('modal/ok')"
       placeholder="Translate as noun..."
       v-model="$store.state.modal.data.translate.noun"
     />

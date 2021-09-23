@@ -4,7 +4,7 @@
       @click="
         $store.dispatch('modal/show', {
           name: 'addWord',
-          data: { name: '', translate: {} },
+          data: { name: '', category: '', translate: {} },
           func: () => {
             $store.dispatch('word/add');
           },

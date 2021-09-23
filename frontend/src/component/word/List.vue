@@ -1,7 +1,13 @@
 <template>
   <div>
     <div class="word" v-for="x in $store.state.word.list" :key="x.word">
-      <ui-icon class="clickable" name="play" width="17px" style="margin-right: 10px" />
+      <ui-icon
+        @click="$store.dispatch('word/play', x.name)"
+        class="clickable"
+        name="play"
+        width="17px"
+        style="margin-right: 10px"
+      />
       <div>{{ x.name }}</div>
 
       <div class="translate" v-if="x.translate.noun?.length">
@@ -21,6 +27,7 @@
             name: 'editWord',
             data: {
               name: x.name,
+              category: x.category,
               translate: {
                 noun: x.translate.noun.join(', '),
                 verb: x.translate.verb.join(', '),
