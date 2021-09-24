@@ -1,5 +1,6 @@
 <template>
   <div>
+    <ui-input placeholder="Filter..." />
     <div class="word" v-for="x in $store.state.word.list" :key="x.word">
       <ui-icon
         @click="$store.dispatch('word/play', x.name)"
@@ -8,16 +9,15 @@
         width="17px"
         style="margin-right: 10px"
       />
-      <div>{{ x.name }}</div>
+      <div class="name">{{ x.name }}</div>
+      <div class="category">{{ x.category }}</div>
 
-      <div class="translate" v-if="x.translate.noun?.length">
-        Noun: {{ x.translate.noun?.join(', ') }}
-      </div>
-      <div class="translate" v-if="x.translate.verb?.length">
-        Verb: {{ x.translate.verb?.join(', ') }}
-      </div>
-      <div class="translate" v-if="x.translate.adjective?.length">
-        Adjective: {{ x.translate.adjective?.join(', ') }}
+      <div class="translate">
+        <div v-if="x.translate.noun?.length">Noun: {{ x.translate.noun?.join(', ') }}</div>
+        <div v-if="x.translate.verb?.length">Verb: {{ x.translate.verb?.join(', ') }}</div>
+        <div v-if="x.translate.adjective?.length">
+          Adjective: {{ x.translate.adjective?.join(', ') }}
+        </div>
       </div>
 
       <ui-icon
@@ -89,9 +89,19 @@ export default defineComponent({
   margin-bottom: 5px;
   align-items: center;
 
+  .name {
+    flex: 1;
+  }
+
+  .category {
+    margin-left: 10px;
+    flex: 1;
+  }
+
   .translate {
     color: #a1a1a1;
     margin-left: 10px;
+    flex: 1;
   }
 }
 </style>
