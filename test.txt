@@ -1,0 +1,3 @@
+ldx 1
+ldy 2
+add
