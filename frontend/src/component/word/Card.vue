@@ -3,14 +3,32 @@
     <div :class="$style.name">
       <div>{{ word.name }}</div>
       <div :class="$style.info">(noun)</div>
+      <div :class="$style.power">[{{ word.power }}]</div>
     </div>
-    <div :style="{ opacity: isShow ? 1 : 0 }" :class="$style.translate">
+    <div
+      :style="{ opacity: isShow || $store.state.training.isBlockButton ? 1 : 0 }"
+      :class="$style.translate"
+    >
       {{ word.translate.noun.join(', ') }}
     </div>
-    <div class="button_group" :class="$style.button_group">
-      <ui-button text="Don't know" icon="not_allowed" size="compact" />
+    <div
+      v-if="!$store.state.training.isBlockButton"
+      class="button_group"
+      :class="$style.button_group"
+    >
+      <ui-button
+        @click="$store.dispatch('training/dontKnowWord')"
+        text="Don't know"
+        icon="not_allowed"
+        size="compact"
+      />
       <ui-button @click="isShow = true" text="Show" icon="show" size="compact" />
-      <ui-button text="Know" icon="check" size="compact" />
+      <ui-button
+        @click="$store.dispatch('training/knowWord')"
+        text="Know"
+        icon="check"
+        size="compact"
+      />
     </div>
   </div>
 </template>
@@ -51,11 +69,18 @@ export default defineComponent({
     display: flex;
     align-items: center;
 
-    .info {
+    .info,
+    .power {
       font-size: 14px;
       margin-left: 10px;
       color: #15acde;
       font-weight: normal;
+    }
+
+    .power {
+      color: #deb915;
+      font-weight: bold;
+      font-size: 18px;
     }
   }
 

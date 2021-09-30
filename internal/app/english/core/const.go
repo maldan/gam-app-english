@@ -8,8 +8,24 @@ type Translate struct {
 
 type Word struct {
 	Name      string    `json:"name"`
-	Category  string    `json:"category"`
+	Category  []string  `json:"category"`
 	Translate Translate `json:"translate"`
+	Power     int       `json:"power"`
 }
 
 var DataDir = ""
+
+func UniqueStringSlice(intSlice []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+	for _, entry := range intSlice {
+		if entry == "" {
+			continue
+		}
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
+}

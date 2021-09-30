@@ -2,6 +2,7 @@ package api
 
 import (
 	"os"
+	"strings"
 
 	"github.com/maldan/gam-app-english/internal/app/english/core"
 	"github.com/maldan/go-cmhp/cmhp_file"
@@ -41,11 +42,15 @@ func (r WordApi) GetList() []core.Word {
 
 // Save word
 func (r WordApi) PostIndex(args core.Word) {
+	args.Category = append(args.Category, strings.ToLower(string(args.Name[0])))
+	args.Category = core.UniqueStringSlice(args.Category)
 	cmhp_file.WriteJSON(core.DataDir+"/word/"+args.Name+".json", &args)
 }
 
 // Save word
 func (r WordApi) PatchIndex(args core.Word) {
+	args.Category = append(args.Category, strings.ToLower(string(args.Name[0])))
+	args.Category = core.UniqueStringSlice(args.Category)
 	cmhp_file.WriteJSON(core.DataDir+"/word/"+args.Name+".json", &args)
 }
 

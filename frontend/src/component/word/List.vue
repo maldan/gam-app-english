@@ -10,7 +10,7 @@
         style="margin-right: 10px"
       />
       <div class="name">{{ x.name }}</div>
-      <div class="category">{{ x.category }}</div>
+      <div class="category">{{ x.category.join(', ') }}</div>
 
       <div class="translate">
         <div v-if="x.translate.noun?.length">Noun: {{ x.translate.noun?.join(', ') }}</div>
@@ -27,7 +27,7 @@
             name: 'editWord',
             data: {
               name: x.name,
-              category: x.category,
+              category: x.category.join(', '),
               translate: {
                 noun: x.translate.noun.join(', '),
                 verb: x.translate.verb.join(', '),

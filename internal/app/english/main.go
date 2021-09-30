@@ -31,8 +31,9 @@ func Start(frontFs embed.FS) {
 		Router: map[string]rapi_core.Handler{
 			"/api": rapi_rest.ApiHandler{
 				Controller: map[string]interface{}{
-					"main": api.MainApi{},
-					"word": api.WordApi{},
+					"main":     api.MainApi{},
+					"word":     api.WordApi{},
+					"training": api.TrainingApi{},
 				},
 			},
 		},

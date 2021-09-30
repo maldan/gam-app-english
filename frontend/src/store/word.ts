@@ -26,7 +26,7 @@ export default {
       (
         await Axios.post(`${action.rootState.main.API_URL}/word`, {
           name: action.rootState.modal.data.name.toLowerCase(),
-          category: action.rootState.modal.data.category.toLowerCase(),
+          category: action.rootState.modal.data.category.toLowerCase().split(', '),
           translate: {
             noun:
               action.rootState.modal.data.translate?.noun
@@ -49,7 +49,7 @@ export default {
       (
         await Axios.patch(`${action.rootState.main.API_URL}/word`, {
           name: action.rootState.modal.data.name.toLowerCase(),
-          category: action.rootState.modal.data.category.toLowerCase(),
+          category: action.rootState.modal.data.category.toLowerCase().split(', '),
           translate: {
             noun:
               action.rootState.modal.data.translate?.noun

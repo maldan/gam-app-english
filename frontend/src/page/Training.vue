@@ -1,11 +1,24 @@
 <template>
   <div class="main">
-    <!-- <Card v-if="$store.state.word.list[0]" :word="$store.state.word.list[0]" /> -->
-    <div class="category_list">
-      <div class="category clickable" v-for="x in $store.state.training.categoryList" :key="x.name">
+    <div v-if="$store.state.training.category === ''" class="category_list">
+      <div
+        @click="$store.dispatch('training/selectCategory', x.name)"
+        class="category clickable"
+        v-for="x in $store.state.training.categoryList"
+        :key="x.name"
+      >
         <div class="name">{{ x.name }}</div>
         <div class="score">{{ x.score || 0 }}</div>
       </div>
+    </div>
+    <div class="card_container" v-else>
+      <ui-button
+        @click="$store.dispatch('training/selectCategory', '')"
+        text="Leave"
+        style="flex: none; margin-bottom: 10px"
+      />
+
+      <Card v-if="$store.state.training.word.name" :word="$store.state.training.word" />
     </div>
   </div>
 </template>
@@ -17,9 +30,7 @@ import Card from '../component/word/Card.vue';
 
 export default defineComponent({
   components: { List, Card },
-  async mounted() {
-    this.$store.dispatch(`word/getList`);
-  },
+  async mounted() {},
   methods: {},
   data: () => {
     return {};
@@ -61,8 +72,10 @@ export default defineComponent({
 
   .card_container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 100%;
   }
 }
 </style>
