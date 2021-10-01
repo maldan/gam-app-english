@@ -26,6 +26,7 @@ func Start(frontFs embed.FS) {
 	core.DataDir = *dataDir
 
 	// Start server
+	fmt.Printf("%s:%d\n", *host, *port)
 	rapi.Start(rapi.Config{
 		Host: fmt.Sprintf("%s:%d", *host, *port),
 		Router: map[string]rapi_core.Handler{
