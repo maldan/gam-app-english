@@ -1,6 +1,8 @@
 package api
 
 import (
+	"math/rand"
+
 	"github.com/maldan/gam-app-english/internal/app/english/core"
 	"github.com/maldan/go-cmhp/cmhp_file"
 )
@@ -10,19 +12,25 @@ type TrainingApi struct {
 
 func (r TrainingApi) GetWord(args ArgsCategory) core.Word {
 	wordList, _ := cmhp_file.List(core.DataDir + "/word")
+	wordCache := make([]core.Word, 0)
+
 	for _, wordFile := range wordList {
 		word := core.Word{}
 		cmhp_file.ReadJSON(core.DataDir+"/word/"+wordFile.Name(), &word)
 
 		for _, cat := range word.Category {
 			if cat == args.Category && word.Power <= 0 {
-				return word
+				wordCache = append(wordCache, word)
 			}
 		}
 	}
 
-	word := core.Word{}
-	return word
+	if len(wordCache) == 0 {
+		word := core.Word{}
+		return word
+	}
+
+	return wordCache[rand.Intn(len(wordCache))]
 }
 
 func (r TrainingApi) GetCategoryList() []core.Category {
@@ -56,6 +64,9 @@ func (r TrainingApi) PostKnowWord(args core.Word) {
 	cmhp_file.ReadJSON(core.DataDir+"/word/"+args.Name+".json", &word)
 	word.Power += 1
 	cmhp_file.WriteJSON(core.DataDir+"/word/"+args.Name+".json", &word)
+
+	s := StatisticsApi{}
+	s.PostCorrect()
 }
 
 func (r TrainingApi) PostDontKnowWord(args core.Word) {
@@ -63,6 +74,9 @@ func (r TrainingApi) PostDontKnowWord(args core.Word) {
 	cmhp_file.ReadJSON(core.DataDir+"/word/"+args.Name+".json", &word)
 	word.Power -= 1
 	cmhp_file.WriteJSON(core.DataDir+"/word/"+args.Name+".json", &word)
+
+	s := StatisticsApi{}
+	s.PostWrong()
 }
 
 // Reset word power

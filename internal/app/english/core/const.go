@@ -1,5 +1,7 @@
 package core
 
+import "time"
+
 type Translate struct {
 	Noun      []string `json:"noun"`
 	Verb      []string `json:"verb"`
@@ -16,6 +18,12 @@ type Word struct {
 	Category  []string  `json:"category"`
 	Translate Translate `json:"translate"`
 	Power     int       `json:"power"`
+}
+
+type Statistics struct {
+	Correct int       `json:"correct"`
+	Wrong   int       `json:"wrong"`
+	Created time.Time `json:"created"`
 }
 
 var DataDir = ""

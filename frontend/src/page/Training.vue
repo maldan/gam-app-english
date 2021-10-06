@@ -12,6 +12,11 @@
       </div>
     </div>
     <div class="card_container" v-else>
+      <div class="stat">
+        <div>Correct: {{ $store.state.statistics.correct }}</div>
+        <div>Wrong: {{ $store.state.statistics.wrong }}</div>
+        <div>Total: {{ $store.state.statistics.correct + $store.state.statistics.wrong }}</div>
+      </div>
       <div class="button_group">
         <ui-button
           @click="$store.dispatch('training/selectCategory', '')"
@@ -96,6 +101,14 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
     height: 100%;
+
+    .stat {
+      display: flex;
+
+      > div {
+        padding: 10px;
+      }
+    }
   }
 }
 </style>

@@ -63,6 +63,7 @@ export default {
       action.commit('SET_WORD', word);
 
       action.dispatch('word/play', word.name, { root: true });
+      action.dispatch('statistics/getToday', null, { root: true });
       action.dispatch('show', false);
     },
     async knowWord(action: TrainingActionContext) {
