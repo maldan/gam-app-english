@@ -6,6 +6,11 @@ type Translate struct {
 	Adjective []string `json:"adjective"`
 }
 
+type Category struct {
+	Name   string `json:"name"`
+	Amount int    `json:"amount"`
+}
+
 type Word struct {
 	Name      string    `json:"name"`
 	Category  []string  `json:"category"`

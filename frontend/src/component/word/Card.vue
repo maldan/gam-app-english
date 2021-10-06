@@ -5,12 +5,19 @@
       <div :class="$style.info">(noun)</div>
       <div :class="$style.power">[{{ word.power }}]</div>
     </div>
+
+    <!-- Word name -->
     <div
-      :style="{ opacity: isShow || $store.state.training.isBlockButton ? 1 : 0 }"
+      :style="{
+        opacity: $store.state.training.isShow || $store.state.training.isBlockButton ? 1 : 0,
+      }"
       :class="$style.translate"
     >
-      {{ word.translate.noun.join(', ') }}
+      {{ word.translate.noun?.join(', ') }}
+      {{ word.translate.verb?.join(', ') }}
+      {{ word.translate.adjective?.join(', ') }}
     </div>
+
     <div
       v-if="!$store.state.training.isBlockButton"
       class="button_group"
@@ -22,7 +29,12 @@
         icon="not_allowed"
         size="compact"
       />
-      <ui-button @click="isShow = true" text="Show" icon="show" size="compact" />
+      <ui-button
+        @click="$store.dispatch('training/show', true)"
+        text="Show"
+        icon="show"
+        size="compact"
+      />
       <ui-button
         @click="$store.dispatch('training/knowWord')"
         text="Know"
@@ -47,9 +59,7 @@ export default defineComponent({
   async mounted() {},
   methods: {},
   data: () => {
-    return {
-      isShow: false,
-    };
+    return {};
   },
 });
 </script>

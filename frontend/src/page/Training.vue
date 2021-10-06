@@ -8,15 +8,33 @@
         :key="x.name"
       >
         <div class="name">{{ x.name }}</div>
-        <div class="score">{{ x.score || 0 }}</div>
+        <div class="score">{{ x.amount }}</div>
       </div>
     </div>
     <div class="card_container" v-else>
-      <ui-button
-        @click="$store.dispatch('training/selectCategory', '')"
-        text="Leave"
-        style="flex: none; margin-bottom: 10px"
-      />
+      <div class="button_group">
+        <ui-button
+          @click="$store.dispatch('training/selectCategory', '')"
+          text="Leave"
+          style="flex: none; margin-bottom: 10px"
+        />
+        <ui-button
+          @click="
+            $store.dispatch('modal/show', {
+              name: 'approve',
+              data: {
+                title: 'Are you sure?',
+              },
+              func: () => {
+                $store.dispatch('training/reset');
+              },
+            })
+          "
+          icon="delete"
+          text="Reset"
+          style="flex: none; margin-bottom: 10px"
+        />
+      </div>
 
       <Card v-if="$store.state.training.word.name" :word="$store.state.training.word" />
     </div>
@@ -30,7 +48,9 @@ import Card from '../component/word/Card.vue';
 
 export default defineComponent({
   components: { List, Card },
-  async mounted() {},
+  async mounted() {
+    this.$store.dispatch('training/getCategoryList');
+  },
   methods: {},
   data: () => {
     return {};

@@ -8,6 +8,8 @@ export type TrainingStore = {
   };
   category: string;
   isBlockButton: boolean;
+  isShow: boolean;
+  categoryList: any[];
 };
 export type TrainingActionContext = ActionContext<TrainingStore, MainTree>;
 
@@ -19,36 +21,13 @@ export default {
     },
     category: '',
     isBlockButton: false,
-    categoryList: [
-      { name: 'a', score: 1 },
-      { name: 'b' },
-      { name: 'c' },
-      { name: 'd' },
-      { name: 'e' },
-      { name: 'f' },
-      { name: 'g' },
-      { name: 'h' },
-      { name: 'i' },
-      { name: 'j' },
-      { name: 'k' },
-      { name: 'l' },
-      { name: 'm' },
-      { name: 'n' },
-      { name: 'o' },
-      { name: 'p' },
-      { name: 'q' },
-      { name: 'r' },
-      { name: 's' },
-      { name: 't' },
-      { name: 'u' },
-      { name: 'v' },
-      { name: 'w' },
-      { name: 'x' },
-      { name: 'y' },
-      { name: 'z' },
-    ],
+    isShow: false,
+    categoryList: [],
   },
   mutations: {
+    SET_CATEGORY_LIST(state: TrainingStore, payload: any) {
+      state.categoryList = payload;
+    },
     SET_CATEGORY(state: TrainingStore, payload: string) {
       state.category = payload;
     },
@@ -58,11 +37,22 @@ export default {
     SET_BLOCK(state: TrainingStore, payload: boolean) {
       state.isBlockButton = payload;
     },
+    SET_SHOW(state: TrainingStore, payload: boolean) {
+      state.isShow = payload;
+    },
   },
   actions: {
     selectCategory(action: TrainingActionContext, payload: string) {
       action.commit('SET_CATEGORY', payload);
       action.dispatch('getWord');
+    },
+    show(action: TrainingActionContext, payload: string) {
+      action.commit('SET_SHOW', payload);
+    },
+    async getCategoryList(action: TrainingActionContext) {
+      const list = (await Axios.get(`${action.rootState.main.API_URL}/training/categoryList`)).data
+        .response;
+      action.commit('SET_CATEGORY_LIST', list);
     },
     async getWord(action: TrainingActionContext) {
       const word = (
@@ -71,6 +61,9 @@ export default {
         )
       ).data.response;
       action.commit('SET_WORD', word);
+
+      action.dispatch('word/play', word.name, { root: true });
+      action.dispatch('show', false);
     },
     async knowWord(action: TrainingActionContext) {
       await Axios.post(`${action.rootState.main.API_URL}/training/knowWord`, {
@@ -92,7 +85,15 @@ export default {
       setTimeout(async () => {
         await action.dispatch('getWord');
         action.commit('SET_BLOCK', false);
+        action.dispatch('show', false);
       }, 500);
+    },
+    async reset(action: TrainingActionContext) {
+      await Axios.post(`${action.rootState.main.API_URL}/training/reset`, {
+        category: action.state.category,
+      });
+
+      action.dispatch('next');
     },
   },
 };

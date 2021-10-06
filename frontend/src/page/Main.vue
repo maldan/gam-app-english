@@ -1,18 +1,5 @@
 <template>
   <div class="main">
-    <ui-button
-      @click="
-        $store.dispatch('modal/show', {
-          name: 'addWord',
-          data: { name: '', category: '', translate: {} },
-          func: () => {
-            $store.dispatch('word/add');
-          },
-        })
-      "
-      text="Add"
-      icon="plus"
-    />
     <List />
   </div>
 </template>

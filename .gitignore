@@ -2,3 +2,4 @@
 /app*
 /.history
 /db
+/word.json

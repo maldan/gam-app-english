@@ -44,6 +44,17 @@ func (r WordApi) GetList() []core.Word {
 func (r WordApi) PostIndex(args core.Word) {
 	args.Category = append(args.Category, strings.ToLower(string(args.Name[0])))
 	args.Category = core.UniqueStringSlice(args.Category)
+
+	if args.Translate.Noun == nil {
+		args.Translate.Noun = make([]string, 0)
+	}
+	if args.Translate.Verb == nil {
+		args.Translate.Verb = make([]string, 0)
+	}
+	if args.Translate.Adjective == nil {
+		args.Translate.Adjective = make([]string, 0)
+	}
+
 	cmhp_file.WriteJSON(core.DataDir+"/word/"+args.Name+".json", &args)
 }
 

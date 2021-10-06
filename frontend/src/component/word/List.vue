@@ -1,7 +1,25 @@
 <template>
   <div>
-    <ui-input placeholder="Filter..." />
-    <div class="word" v-for="x in $store.state.word.list" :key="x.word">
+    <!-- Header -->
+    <div class="header">
+      <ui-input placeholder="Filter..." v-model="filter" />
+      <ui-button
+        @click="
+          $store.dispatch('modal/show', {
+            name: 'addWord',
+            data: { name: '', category: '', translate: {} },
+            func: () => {
+              $store.dispatch('word/add');
+            },
+          })
+        "
+        text="Add"
+        icon="plus"
+      />
+    </div>
+
+    <!-- Word list -->
+    <div class="word" v-for="x in wordList" :key="x.word">
       <ui-icon
         @click="$store.dispatch('word/play', x.name)"
         class="clickable"
@@ -11,6 +29,7 @@
       />
       <div class="name">{{ x.name }}</div>
       <div class="category">{{ x.category.join(', ') }}</div>
+      <div class="category">{{ x.power }}</div>
 
       <div class="translate">
         <div v-if="x.translate.noun?.length">Noun: {{ x.translate.noun?.join(', ') }}</div>
@@ -71,17 +90,29 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   props: {},
   components: {},
+  computed: {
+    wordList() {
+      return this.$store.state.word.list.filter((x: any) => x.name.match(this.filter));
+    },
+  },
   async mounted() {
     this.$store.dispatch(`word/getList`);
   },
   methods: {},
   data: () => {
-    return {};
+    return {
+      filter: '',
+    };
   },
 });
 </script>
 
 <style lang="scss" scoped>
+.header {
+  display: flex;
+  padding: 10px;
+}
+
 .word {
   display: flex;
   background: #1b1b1b;

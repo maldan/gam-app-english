@@ -2,6 +2,6 @@
   "go.buildFlags": ["foo"],
   "go.useLanguageServer": true,
   "go.toolsEnvVars": {
-    "GOOS": "linux"
+    "GOOS": "windows"
   }
 }
