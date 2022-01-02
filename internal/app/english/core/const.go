@@ -9,8 +9,9 @@ type Translate struct {
 }
 
 type Category struct {
-	Name   string `json:"name"`
-	Amount int    `json:"amount"`
+	Name    string `json:"name"`
+	Amount  int    `json:"amount"`
+	Correct int    `json:"correct"`
 }
 
 type Word struct {
@@ -21,8 +22,8 @@ type Word struct {
 }
 
 type Statistics struct {
-	Correct int       `json:"correct"`
-	Wrong   int       `json:"wrong"`
+	Correct []string  `json:"correct"`
+	Wrong   []string  `json:"wrong"`
 	Created time.Time `json:"created"`
 }
 
@@ -30,7 +31,7 @@ var DataDir = ""
 
 func UniqueStringSlice(intSlice []string) []string {
 	keys := make(map[string]bool)
-	list := []string{}
+	var list []string
 	for _, entry := range intSlice {
 		if entry == "" {
 			continue

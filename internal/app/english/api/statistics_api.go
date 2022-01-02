@@ -20,22 +20,22 @@ func (r StatisticsApi) GetToday() core.Statistics {
 func (r StatisticsApi) GetTotalByDate(args ArgsDate) int {
 	stat := core.Statistics{}
 	cmhp_file.ReadJSON(core.DataDir+"/stat/"+cmhp_time.Format(args.Date, "YYYY-MM-DD")+".json", &stat)
-	return stat.Correct + stat.Wrong
+	return len(stat.Correct) + len(stat.Wrong)
 }
 
-func (r StatisticsApi) PostCorrect() {
+func (r StatisticsApi) PostCorrect(args core.Word) {
 	stat := core.Statistics{}
 	cmhp_file.ReadJSON(core.DataDir+"/stat/"+cmhp_time.Format(time.Now(), "YYYY-MM-DD")+".json", &stat)
 	stat.Created = time.Now()
-	stat.Correct += 1
+	stat.Correct = append(stat.Correct, args.Name)
 	cmhp_file.WriteJSON(core.DataDir+"/stat/"+cmhp_time.Format(time.Now(), "YYYY-MM-DD")+".json", &stat)
 }
 
-func (r StatisticsApi) PostWrong() {
+func (r StatisticsApi) PostWrong(args core.Word) {
 	stat := core.Statistics{}
 	cmhp_file.ReadJSON(core.DataDir+"/stat/"+cmhp_time.Format(time.Now(), "YYYY-MM-DD")+".json", &stat)
 	stat.Created = time.Now()
-	stat.Wrong += 1
+	stat.Wrong = append(stat.Wrong, args.Name)
 	cmhp_file.WriteJSON(core.DataDir+"/stat/"+cmhp_time.Format(time.Now(), "YYYY-MM-DD")+".json", &stat)
 }
 

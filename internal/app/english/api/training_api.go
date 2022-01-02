@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/maldan/go-cmhp/cmhp_slice"
 	"math/rand"
 
 	"github.com/maldan/gam-app-english/internal/app/english/core"
@@ -51,9 +52,25 @@ func (r TrainingApi) GetCategoryList() []core.Category {
 		}
 	}
 
+	// Get today correct
+	s := StatisticsApi{}
+	stat := s.GetToday()
+	correct := cmhp_slice.UniqueR(stat.Correct)
+
+	w := WordApi{}
+
 	// Fill result
 	for category, amount := range catMap {
-		list = append(list, core.Category{Name: category, Amount: amount})
+		correct := cmhp_slice.FilterR(correct, func(i interface{}) bool {
+			word := w.GetIndex(core.Word{Name: i.(string)})
+			return cmhp_slice.IncludesR(word.Category, category)
+		})
+
+		list = append(list, core.Category{
+			Name:    category,
+			Amount:  amount,
+			Correct: len(correct),
+		})
 	}
 
 	return list
@@ -66,7 +83,7 @@ func (r TrainingApi) PostKnowWord(args core.Word) {
 	cmhp_file.WriteJSON(core.DataDir+"/word/"+args.Name+".json", &word)
 
 	s := StatisticsApi{}
-	s.PostCorrect()
+	s.PostCorrect(args)
 }
 
 func (r TrainingApi) PostDontKnowWord(args core.Word) {
@@ -76,10 +93,10 @@ func (r TrainingApi) PostDontKnowWord(args core.Word) {
 	cmhp_file.WriteJSON(core.DataDir+"/word/"+args.Name+".json", &word)
 
 	s := StatisticsApi{}
-	s.PostWrong()
+	s.PostWrong(args)
 }
 
-// Reset word power
+// PostReset Reset word power
 func (r TrainingApi) PostReset(args ArgsCategory) {
 	// Get words
 	wordList, _ := cmhp_file.List(core.DataDir + "/word")

@@ -13,14 +13,14 @@ import (
 type WordApi struct {
 }
 
-// Get word
+// GetIndex Get word
 func (r WordApi) GetIndex(args core.Word) core.Word {
 	out := core.Word{}
 	cmhp_file.ReadJSON(core.DataDir+"/word/"+args.Name+".json", &out)
 	return out
 }
 
-// Play word sound
+// GetPlay Play word sound
 func (r WordApi) GetPlay(context *rapi_core.Context, args core.Word) string {
 	context.IsServeFile = true
 	os.MkdirAll("/tmp/tts", 0777)
@@ -28,7 +28,7 @@ func (r WordApi) GetPlay(context *rapi_core.Context, args core.Word) string {
 	return "/tmp/tts/" + args.Name + ".wav"
 }
 
-// Get word list
+// GetList Get word list
 func (r WordApi) GetList() []core.Word {
 	out := make([]core.Word, 0)
 	l, _ := cmhp_file.List(core.DataDir + "/word")

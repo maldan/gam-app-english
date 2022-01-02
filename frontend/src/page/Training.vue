@@ -4,18 +4,24 @@
       <div
         @click="$store.dispatch('training/selectCategory', x.name)"
         class="category clickable"
-        v-for="x in $store.state.training.categoryList"
+        v-for="x in categoryList"
         :key="x.name"
       >
         <div class="name">{{ x.name }}</div>
-        <div class="score">{{ x.amount }}</div>
+        <div class="score">
+          <div v-if="x.correct > 0" class="correct">{{ x.correct }}</div>
+          <div class="total">{{ x.amount - x.correct }}</div>
+        </div>
       </div>
     </div>
     <div class="card_container" v-else>
       <div class="stat">
-        <div>Correct: {{ $store.state.statistics.correct }}</div>
-        <div>Wrong: {{ $store.state.statistics.wrong }}</div>
-        <div>Total: {{ $store.state.statistics.correct + $store.state.statistics.wrong }}</div>
+        <div>Correct: {{ $store.state.statistics.correct?.length }}</div>
+        <div>Wrong: {{ $store.state.statistics.wrong?.length }}</div>
+        <div>
+          Total:
+          {{ $store.state.statistics.correct?.length + $store.state.statistics.wrong?.length }}
+        </div>
       </div>
       <div class="button_group">
         <ui-button
@@ -56,6 +62,15 @@ export default defineComponent({
   async mounted() {
     this.$store.dispatch('training/getCategoryList');
   },
+  computed: {
+    categoryList() {
+      const list = this.$store.state.training.categoryList;
+      list.sort((a: any, b: any) => {
+        return a.name.localeCompare(b.name);
+      });
+      return list;
+    },
+  },
   methods: {},
   data: () => {
     return {};
@@ -70,7 +85,7 @@ export default defineComponent({
 
   .category_list {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     gap: 10px;
 
     .category {
@@ -91,6 +106,13 @@ export default defineComponent({
 
       .score {
         margin-top: 10px;
+        display: flex;
+
+        .correct {
+          font-weight: bold;
+          margin-right: 5px;
+          color: #ff8843;
+        }
       }
     }
   }

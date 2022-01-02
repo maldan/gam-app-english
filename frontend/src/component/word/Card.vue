@@ -13,9 +13,15 @@
       }"
       :class="$style.translate"
     >
-      {{ word.translate.noun?.join(', ') }}
-      {{ word.translate.verb?.join(', ') }}
-      {{ word.translate.adjective?.join(', ') }}
+      <div v-if="word.translate.noun?.length">
+        <b>Noun:</b> {{ word.translate.noun?.join(', ') }}
+      </div>
+      <div v-if="word.translate.verb?.length">
+        <b>Verb:</b> {{ word.translate.verb?.join(', ') }}
+      </div>
+      <div v-if="word.translate.adjective?.length">
+        <b>Adjective:</b> {{ word.translate.adjective?.join(', ') }}
+      </div>
     </div>
 
     <div
@@ -107,6 +113,10 @@ export default defineComponent({
     font-size: 22px;
     color: #9cb458;
     margin-bottom: 15px;
+
+    b {
+      color: #d6bd54;
+    }
   }
 
   .button_group {
