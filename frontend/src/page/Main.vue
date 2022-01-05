@@ -54,6 +54,7 @@
                 verb: x.translate.verb.join(', '),
                 adjective: x.translate.adjective.join(', '),
               },
+              isExists: false,
             },
             func: () => {
               $store.dispatch('word/edit');

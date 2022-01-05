@@ -6,6 +6,7 @@ type Translate struct {
 	Noun      []string `json:"noun"`
 	Verb      []string `json:"verb"`
 	Adjective []string `json:"adjective"`
+	Adverb    []string `json:"adverb"`
 }
 
 type Category struct {
@@ -28,18 +29,3 @@ type Statistics struct {
 }
 
 var DataDir = ""
-
-func UniqueStringSlice(intSlice []string) []string {
-	keys := make(map[string]bool)
-	var list []string
-	for _, entry := range intSlice {
-		if entry == "" {
-			continue
-		}
-		if _, value := keys[entry]; !value {
-			keys[entry] = true
-			list = append(list, entry)
-		}
-	}
-	return list
-}

@@ -1,33 +1,30 @@
 <template>
   <div>
     <ui-input
-      @keydown.enter="$store.dispatch('modal/ok')"
       placeholder="Word..."
       v-model="$store.state.modal.data.name"
+      @keyup="$store.dispatch('word/checkExists', $store.state.modal.data)"
+      @keyup.enter="$store.dispatch('word/translate', $store.state.modal.data)"
     />
+    <ui-input placeholder="Category..." v-model="$store.state.modal.data.category" />
+    <ui-input placeholder="Translate as noun..." v-model="$store.state.modal.data.translate.noun" />
+    <ui-input placeholder="Translate as verb..." v-model="$store.state.modal.data.translate.verb" />
     <ui-input
-      @keydown.enter="$store.dispatch('modal/ok')"
-      placeholder="Category..."
-      v-model="$store.state.modal.data.category"
-    />
-
-    <ui-input
-      @keydown.enter="$store.dispatch('modal/ok')"
-      placeholder="Translate as noun..."
-      v-model="$store.state.modal.data.translate.noun"
-    />
-    <ui-input
-      @keydown.enter="$store.dispatch('modal/ok')"
-      placeholder="Translate as verb..."
-      v-model="$store.state.modal.data.translate.verb"
-    />
-    <ui-input
-      @keydown.enter="$store.dispatch('modal/ok')"
       placeholder="Translate as adjective..."
       v-model="$store.state.modal.data.translate.adjective"
     />
+    <div
+      v-if="$store.state.modal.data.isExists"
+      style="margin-top: 6px; color: #33ad53; padding: 3px"
+    >
+      Word already exists
+    </div>
     <div class="button_group" style="margin-top: 5px">
       <ui-button text="Cancel" @click="$store.dispatch('modal/close')" />
+      <ui-button
+        text="Translate"
+        @click="$store.dispatch('word/translate', $store.state.modal.data)"
+      />
       <ui-button
         :disabled="!$store.state.modal.data.name"
         text="Add"
@@ -52,4 +49,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.window {
+}
+</style>

@@ -55,15 +55,15 @@ func (r TrainingApi) GetCategoryList() []core.Category {
 	// Get today correct
 	s := StatisticsApi{}
 	stat := s.GetToday()
-	correct := cmhp_slice.UniqueR(stat.Correct)
+	correct := cmhp_slice.Unique(stat.Correct)
 
 	w := WordApi{}
 
 	// Fill result
 	for category, amount := range catMap {
-		correct := cmhp_slice.FilterR(correct, func(i interface{}) bool {
-			word := w.GetIndex(core.Word{Name: i.(string)})
-			return cmhp_slice.IncludesR(word.Category, category)
+		correct := cmhp_slice.Filter(correct, func(i string) bool {
+			word := w.GetIndex(core.Word{Name: i})
+			return cmhp_slice.Includes(word.Category, category)
 		})
 
 		list = append(list, core.Category{
